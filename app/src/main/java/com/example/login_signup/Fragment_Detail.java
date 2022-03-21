@@ -85,6 +85,8 @@ public class Fragment_Detail extends Fragment {
         //problem.setText(ORDER.get());
         //equipment.setText(ORDER.get());
         description.setText(ORDER.getDescription()+"");
+        description.setText(ORDER.getDescription()+"");
+        description.setText(ORDER.getDescription()+"");
         //client.setText(ORDER.ge());
         //nom_client.setText(ORDER.getOrder_number());
 
