@@ -3,117 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGray2"
     tools:context=".Fragment_Detail">
 
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorGray2"
-        >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:orientation="vertical"
-            android:background="@color/colorGray2"
             >
-        <TextView
-            android:id="@+id/bt_order_number"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="détails"
-            android:textSize="35dp"
-            android:background="@color/colorWhite"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"/>
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:orientation="horizontal"-->
-<!--                >-->
-<!--                <TextView-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_weight="3"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:text="Problème"-->
-<!--                    android:textSize="25dp"-->
-<!--                    android:layout_gravity="center_horizontal"-->
-<!--                    android:layout_marginLeft="5dp"/>-->
-<!--                <TextView-->
-<!--                    android:layout_marginLeft="15dp"-->
-<!--                    android:id="@+id/problem"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_weight="5"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:textSize="25dp"-->
-<!--                    android:layout_gravity="center_horizontal"-->
-<!--                    android:gravity="center"/>-->
-<!--            </LinearLayout>-->
+            <TextView
+                android:id="@+id/bt_order_number"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Détails"
+                android:textSize="25dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:background="@color/colorWhite"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
                 android:orientation="horizontal"
+                android:layout_marginTop="25dp"
+
                 >
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="match_parent"
-                    android:text="Equipement"
-                    android:textSize="25dp"
+                    android:text="Problème"
+                    android:textAlignment="center"
+                    android:textSize="20dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="5dp"/>
                 <TextView
                     android:layout_marginLeft="15dp"
-                    android:id="@+id/equipment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:id="@+id/problem"
+                    android:layout_width="0dp"
                     android:layout_weight="5"
+                    android:layout_height="match_parent"
                     android:textSize="25dp"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center"/>
-            </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    >
-                    <TextView
-                        android:layout_marginLeft="15dp"
-                        android:id="@+id/description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="5"
-                        android:text="Description"
-                        android:textSize="25dp"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center"/>
-                </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/colorWhite"
                 android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -124,8 +66,59 @@
                         android:layout_width="0dp"
                         android:layout_weight="3"
                         android:layout_height="match_parent"
-                        android:text="Client"
+                        android:text="Équipement"
+                        android:textSize="20dp"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="5dp"/>
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:id="@+id/equipment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
                         android:textSize="25dp"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    >
+                    <TextView
+                        android:layout_marginLeft="15dp"
+                        android:id="@+id/description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:text="Description"
+                        android:textSize="25dp"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_height="match_parent"
+                        android:text="Client"
+                        android:textSize="20dp"
+                        android:textAlignment="center"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginLeft="5dp"/>
                     <TextView
@@ -142,6 +135,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+
                     >
                     <TextView
                         android:layout_marginLeft="15dp"
@@ -159,15 +154,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
                 >
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="match_parent"
-                    android:text="prioritée"
-                    android:textSize="25dp"
+                    android:text="Priorité"
+                    android:textSize="20dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="5dp"/>
                 <TextView
@@ -178,6 +173,7 @@
                     android:textSize="25dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="5dp"/>
+
                 <Spinner
                     android:layout_marginLeft="15dp"
                     android:id="@+id/priorite"
