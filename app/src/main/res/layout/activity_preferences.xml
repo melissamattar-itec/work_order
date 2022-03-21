@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorWhite"
+        android:elevation="4dp"
+        />
+
+    <EditText
+        android:layout_marginTop="50dp"
+        android:id="@+id/ipadresse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="http://192.168.100.60:94/jderest"
+        />
+    <EditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/jdeuser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="user"
+        />
+    <EditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/jdepassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="password"
+        />
+    <EditText
+        android:layout_marginTop="20dp"
+        android:id="@+id/jdeenvironment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="Environment"
+        />
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/btnSave"
+        style="@style/loginButton"
+        android:layout_gravity="center"
+        android:text="  Enregistrer  " />
+
+
+
+
+</LinearLayout>

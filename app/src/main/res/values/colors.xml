@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorBlue">#008</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#fff</color>
+    <color name="colorGray">#696969</color>
+    <color name="colorGray1">#C0C0C0</color>
+    <color name="colorGray2">#D3D3D3</color>
+    <color name="colorPrimary">#008</color>
+    <color name="colorPrimaryDark">#008</color>
+    <color name="colorAccent">#008</color>
+
+    <!--colors for modern ui-->
+    <color name="whiteTextColor">#fff</color>
+    <color name="primaryTextColor">#008</color>
+    <color name="loginBkColor">#f0f0f0</color>
+    <color name="orange">#ffff8800</color>
+    <color name="red">#ff0000</color>
+    <color name="green">#008000</color>
+    <color name="darker_gray">#aaaaaa</color>
+    <!--colros for card-->
+    <color name="whiteCardColor">#fff</color>
+
+    <color name="view_gray">#8d95989a</color>
+
+    <color name="light_green_600">#7CB342</color>
+    <color name="overlay_light_80">#CCFFFFFF</color>
+    <color name="grey_10">#e6e6e6</color>
+    <color name="grey_20">#cccccc</color>
+    <color name="grey_40">#999999</color>
+    <color name="grey_60">#666666</color>
+    <color name="grey_80">#37474F</color>
+    <color name="grey_90">#263238</color>
+
+    <color name="textColorPrimary">#FFFFFF</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="navigationBarColor">#000000</color>
+</resources>

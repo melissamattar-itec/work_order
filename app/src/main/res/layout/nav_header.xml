@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="bottom"
+    android:padding="16dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:layout_height="250dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="190dp"
+        android:background="@drawable/work_order_logo">
+
+    </ImageView>
+
+<!--    <TextView-->
+<!--        android:id="@+id/headerMail"-->
+<!--        android:layout_marginTop="130dp"-->
+<!--        android:layout_width="133dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text=""-->
+<!--        android:textColor="#b8860b" />-->
+
+    <TextView
+        android:layout_marginTop="-15dp"
+        android:id="@+id/headerName"
+        android:layout_width="150dp"
+        android:layout_height="25dp"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/black" />
+
+</LinearLayout>
