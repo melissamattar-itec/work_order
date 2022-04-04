@@ -63,10 +63,17 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
     private DrawerLayout drawer;
     private ActionBarDrawerToggle drawerToggle;
     ArrayList<T_Details> Status = new ArrayList<>();
+    ArrayList<T_Details> Site_desc = new ArrayList<>();
+    ArrayList<T_Details> Commune_desc = new ArrayList<>();
+    ArrayList<T_Details> Quartier_desc = new ArrayList<>();
+    ArrayList<T_Details> Status_Equipments = new ArrayList<>();
+    ArrayList<T_Details> Types = new ArrayList<>();
+    ArrayList<T_Details> Sous_Types = new ArrayList<>();
+    ArrayList<T_Details> Priorities= new ArrayList<>();
     ArrayList<T_Orders> Orders= new ArrayList<>();
     ArrayList<T_Orders> ListElements= new ArrayList<>();
     Boolean finish=false;
-    Boolean check_orders=false , check_Status = false;
+    Boolean check_orders=false ,check_site=false , check_communne= false , check_quartier=false,  check_Status = false , check_types =false , check_sous_type =false , check_priority =false , check_status_Equipment=false;
     ActionBar actionBar;
 
     @Override
@@ -353,7 +360,14 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
                                                 String address_number = elementFromRow.getString("Address Number");
                                                 if (!address_number.equals(null)) {
                                                     generateToken_orders(address_number);
-                                                    generateTokenudc();
+                                                    generateTokenStatus_workorder();
+                                                    generateTokenSite_desc();
+                                                    generateTokenCommune_desc();
+                                                    generateTokenQuartier_desc();
+                                                    generateTokenStatus_Equipment();
+                                                    generateTokenTypeWO();
+                                                    generateTokenSousTypeWO();
+                                                    generateTokenPriorites();
 //                                                    generateTokenObservations();
 //                                                    generateTokenstatus();
 //                                                    generateTokentypelecture();
@@ -458,7 +472,7 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
     private void generateOrder(String UserToken_Order, String addressNumber) throws JSONException {
         //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
         //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
-       JSONObject body = new JSONObject();
+        JSONObject body = new JSONObject();
         body.put("token", UserToken_Order);
         body.put("Assigned_To", addressNumber);
         Log.i("AddressOrder",addressNumber);
@@ -477,52 +491,306 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
                         try {
 
                             JSONObject list_work_orders =response.getJSONObject("DR_LIST_WORK_ORDER");
-                             Log.i("list_work_orders",list_work_orders.toString());
-                            // JSONArray forms= new JSONArray("forms");
-                           // Log.i("forms",forms.toString());
+                            Log.i("list_work_orders",list_work_orders.toString());
                             JSONArray rowSet = list_work_orders.getJSONArray("rowset");
-                             //Log.i("forms",forms.getJSONObject(0).toString());
 
-                            //JSONArray rowSet =forms.getJSONObject(0).getJSONObject("fs_P48201_W48201F").getJSONObject("data").getJSONObject("gridData").getJSONArray("rowset");
-//                            Log.i("rowset0",servicerequest.getJSONArray("rowset").getJSONObject(0).toString());
-
-                          // JSONArray rowSet = new JSONArray(response.getJSONArray("forms"));
-                            //StringBuilder stringToShow = new StringBuilder();
-                            //Log.i("order rowset_lenght", rowSet.length()+"");
-
-
-//                            if(rowSet.length()==0){
-//                                check_orders=true;
-//                               // check_clients=true;
-//                                Log.i(" generate check_orders" , check_orders +"");
-//                                //Insert_Data_database();
-////                                if(check_orders==true ){
-////                                    // insert data collected from the webservices into the database
-////                                    Insert_Data_database();
-////                                }
-//                            }
 
 
                             for (int i = 0; i < rowSet.length(); i++) {
-                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+
+                                JSONArray equipment_description =response.getJSONArray("DR_MWO_EQUIPMENT_DESCRIPTION_Repeating").getJSONObject(i).getJSONObject("DR_MWO_EQUIPMENT_DESCRIPTION").getJSONArray("rowset");
+                                JSONArray contact_Details = new JSONArray(response.getString("BF_CONTACT_DETAILS_Repeating"));
+                                JSONArray installaltion_Details =  new JSONArray(response.getString("BF_INSTALLATION_DETAILS_Repeating"));
+                                String Type = new String();
+                                String Sous_Type = new String();
+                                Integer Client_Number = new Integer(0);
+                                Integer Order_Number = new Integer(0);
+                                Integer Equipment_Number = new Integer(0);
+                                String Start_Date = new String();
+                                String Description = new String();
+                                String Order_Date = new String();
+                                String Priority = new String();
+                                String Client_Name = new String();
+                                String Problem = new String();
+                                Double Longitude = new Double(0.0);
+                                Double Latitude = new Double(0.0);
+                                String Status = new String();
+                                Integer Service_Address = new Integer(0);
+                                String Equipment_description = new String();
+                                String Equipment_status= new String();
+                                String Phone_Area_Code1= new String();
+                                String Phone_Number= new String();
+                                String Email_Address= new String();
+                                String Address_Line1= new String();
+                                String Address_Line2= new String();
+                                String Installation_Code= new String();
+                                String Puissance= new String();
+                                String Tarif= new String();
+                                String Amperage= new String();
+                                String Site= new String();
+                                String Commune= new String();
+                                String Quartier= new String();
+
 //                                MyDataBaseHelper mydb = new MyDataBaseHelper(Page_Login.this);
 //                                mydb.addTournee(elementFromRow.getString("ProfilingUDC6"), elementFromRow.getString("FiscalYear"), elementFromRow.getString("PerNo"), elementFromRow.getString("fromStatus"), elementFromRow.getString("CountRead"), elementFromRow.getString("CountInstallation"), User_Id , elementFromRow.getInt("Max Consumption Eau"), elementFromRow.getInt("Max Consumption Elec"));
-//
+                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+                                try {
+                                    Type = elementFromRow.getString("Type");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    Sous_Type = elementFromRow.getString("Sous Type");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    Client_Number = elementFromRow.getInt("Client Number ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    Order_Number = elementFromRow.getInt("Order Number ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Equipment_Number = elementFromRow.getInt("Equipment Number ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Start_Date = elementFromRow.getString("Start Date ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Description = elementFromRow.getString("Description ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Order_Date = elementFromRow.getString("Order Date ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    Priority = elementFromRow.getString("Priority  ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Client_Name= elementFromRow.getString("Client Name ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    Problem= elementFromRow.getString("Problem  ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Longitude = elementFromRow.getDouble("Longitude ");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                try {
+                                    Latitude = elementFromRow.getDouble("Latitude");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Status = elementFromRow.getString("Status");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    Service_Address = elementFromRow.getInt("Service Address");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                for (int j = 0; j < equipment_description.length(); j++) {
+                                    Log.i("ok", "fet 3l while j");
+                                    JSONObject descrepeating = equipment_description.getJSONObject(j) ;
+                                    Log.i("descrepeating", descrepeating.toString());
+                                    //Log.i("DESCRIPTIONREPEATING", descrepeating.getString("Equipment Number"));
+                                    Log.i("DESCRIPTIONREPEATING",Equipment_Number+"");
+                                    if (!descrepeating.isNull("Equipment Number")) {
+                                        Log.i("EquipmentNumber", descrepeating.getString("Equipment Number"));
+                                        if (descrepeating.getInt("Equipment Number") == Equipment_Number) {
+                                            Equipment_description = descrepeating.getString("Description");
+                                            Log.i("LogEquipment_description",descrepeating.getString("Description"));
+                                            Equipment_status = descrepeating.getString("EquipmentStatus");
+                                            Log.i("EquipmentDescEquipmentStatus", Equipment_description + Equipment_status);
+
+                                            break;
+
+                                        }
+
+                                    }
+
+                                }
+
+                                for (int K = 0; K < contact_Details.length(); K ++) {
+                                    Log.i("ok", "fet 3l while K");
+                                    JSONObject contactrepeating = new JSONObject(contact_Details.getString(K)) ;
+                                    Log.i("contact_Details", contactrepeating.toString());
+                                    //Log.i("DESCRIPTIONREPEATING", descrepeating.getString("Equipment Number"));
+                                    //Log.i("contact_DetailsREPEATING",Equipment_Number+"");
+                                    if (!contactrepeating.isNull("Order_Number")) {
+                                        Log.i("OrderNumber", contactrepeating.getString("Order_Number"));
+                                        if (contactrepeating.getInt("Order_Number") == Order_Number) {
+                                            try {
+                                                Phone_Area_Code1 = contactrepeating.getString("Phone_Area_Code1");
+                                            }catch (Exception e){
+                                                Puissance="";
+                                            }
+
+                                            Log.i("Phone_Area_Code1",contactrepeating.getString("Phone_Area_Code1"));
+                                            try {
+                                                Phone_Number = contactrepeating.getString("Phone_Number");
+                                            }catch (Exception e){
+                                                Puissance="";
+                                            }
+
+                                            Log.i("Phone_Number", Equipment_description + Equipment_status);
+
+                                            try {
+                                                Email_Address = contactrepeating.getString("Email_Address");
+                                            }catch (Exception e){
+                                                Puissance="";
+                                            }
+
+                                            Log.i("Email_Address",contactrepeating.getString("Email_Address"));
+
+
+                                            try {
+                                                Address_Line1 = contactrepeating.getString("Address_Line1");
+                                            }catch (Exception e){
+                                                Puissance="";
+                                            }
+
+                                            Log.i("Address_Line1",contactrepeating.getString("Address_Line1"));
+
+                                            try {
+                                                Address_Line2 = contactrepeating.getString("Address_Line2");
+                                            }catch (Exception e){
+                                                Puissance="";
+                                            }
+
+                                            Log.i("Address_Line2",contactrepeating.getString("Address_Line2"));
+
+                                            break;
+
+                                        }
+
+                                    }
+
+                                }
+                                for (int L = 0; L < installaltion_Details.length(); L ++) {
+                                    Log.i("ok", "fet 3l while L");
+                                    JSONObject installationrepeating = new JSONObject(installaltion_Details.getString(L)) ;
+                                    Log.i("descrepeating", installationrepeating.toString());
+                                    //Log.i("DESCRIPTIONREPEATING", descrepeating.getString("Equipment Number"));
+                                    Log.i("DESCRIPTIONREPEATING",Order_Number+"");
+                                    if (!installationrepeating.isNull("Order_Number")) {
+                                        Log.i("Installation_Code", installationrepeating.getString("Installation_Code "));
+                                        if (installationrepeating.getInt("Order_Number") == Order_Number) {
+                                            Installation_Code = installationrepeating.getString("Installation_Code ");
+                                            Log.i("Installation_Code",installationrepeating.getString("Installation_Code "));
+                                            try {
+                                                Puissance = installationrepeating.getString("Puissance ");
+                                            }catch (Exception e){
+                                                Puissance="";
+                                            }
+
+                                            try {
+                                                Tarif = installationrepeating.getString("Tarif ");
+                                            }catch (Exception e){
+                                                Tarif="";
+                                            }
+
+                                            try {
+                                                Amperage = installationrepeating.getString("Amperage  ");
+                                            }catch (Exception e){
+                                                Amperage="";
+                                            }
+
+                                            try {
+                                                Site = installationrepeating.getString("Site");
+                                            }catch (Exception e){
+                                                Site="";
+                                            }
+
+                                            try {
+                                                Commune = installationrepeating.getString("Commune");
+                                            }catch (Exception e){
+                                                Commune="";
+                                            }
+
+                                            try {
+                                                Quartier = installationrepeating.getString("Quartier");
+                                            }catch (Exception e){
+                                                Quartier="";
+                                            }
+
+                                            break;
+
+                                        }
+
+                                    }
+
+
+                                }
                                 i_order++;
 
                                 Orders.add(new T_Orders(
                                         i_order,
                                         1,
-                                        elementFromRow.getString("Type"),
-                                        elementFromRow.getString("Sous Type"),
-                                        elementFromRow.getInt("Order Number "),
-                                        elementFromRow.getString("Start Date "),
-                                        elementFromRow.getString("Description "),
-                                        elementFromRow.getString("Order Date "),
-                                        elementFromRow.getString("Priority  "),
-                                        elementFromRow.getString("Work Status ")
-                                      ));
-                                        Log.i("Response orders" , "ok");
+                                        Type,
+                                        Sous_Type,
+                                        Client_Number,
+                                        Order_Number,
+                                        Equipment_Number,
+                                        Start_Date,
+                                        Description,
+                                        Order_Date,
+                                        Priority,
+                                        Client_Name,
+                                        Problem,
+                                        Longitude,
+                                        Latitude,
+                                        Status,
+                                        Service_Address,
+                                        Equipment_description,
+                                        Equipment_status,
+                                        Phone_Area_Code1,
+                                        Phone_Number,
+                                        Email_Address,
+                                        Address_Line1,
+                                        Address_Line2,
+                                        Installation_Code,
+                                        Puissance,
+                                        Tarif,
+                                        Amperage,
+                                        Site,
+                                        Commune,
+                                        Quartier,
+                                        null,
+                                        "",
+                                        0
+                                ));
+                                Log.i("Response orders" , "ok");
+
                                 if(i==rowSet.length()-1){
                                     check_orders=true;
                                     Log.i("check_orders" , "ok");
@@ -530,11 +798,11 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
                             }
 
 
-                                    if(check_orders==true && check_Status == true) {
-                                        Insert_Data_database();
-                                        Log.i("Insert", "done");
+                            if(check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
 
-                                    }
+                            }
 
                             //  destroyToken();
 
@@ -557,7 +825,8 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
 
     }
 
-    private void generateTokenudc() {
+
+    private void generateTokenStatus_workorder() {
 
         IResult mResultCallback = new IResult() {
             @Override
@@ -570,7 +839,7 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
                     Log.i("Token", "t" + token);
 
                     if (token != null) {
-                        generateudc(token);
+                        generateStatus_workorder(token);
                     } else {
                         Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
                     }
@@ -606,7 +875,7 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
 
     }
 
-    private void generateudc(String tokenStatus) {
+    private void generateStatus_workorder(String tokenStatus) {
         //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
         // RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
         Url=new Url(getApplicationContext());
@@ -615,7 +884,7 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
-                bodyForStatusRequest(tokenStatus),
+                bodyForStatus_workorderRequest(tokenStatus),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -643,11 +912,12 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
                                 if(i==rowSet.length()-1){
                                     check_Status=true;
 
-                                    if(check_orders==true && check_Status==true){
-                                        // insert data collected from the webservices into the database
-                                        Insert_Data_database();
-                                    }
                                 }
+                            }
+                            if( check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
+
                             }
 
                         } catch (JSONException e) {
@@ -669,7 +939,7 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
         RequestQueueSingleton.getInstance(Page_Login.this).addToRequestQueue1(jsonObjectRequest);
     }
 
-    private JSONObject bodyForStatusRequest(String token) {
+    private JSONObject bodyForStatus_workorderRequest(String token) {
         JSONObject body = new JSONObject();
         try {
             body.put("token", token);
@@ -679,10 +949,931 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
         } catch (JSONException e) {
 
             Toast.makeText(this, "erreur de connexion", Toast.LENGTH_SHORT).show();
-            Log.i("bodyForStatusRequest", e.getMessage());
+            Log.i("bodyForStatus_workorderRequest", e.getMessage());
             return null;
         }
     }
+
+
+    private void generateTokenSite_desc() {
+
+        IResult mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(JSONObject response) {
+                Log.i("Volley ", "response" + response);
+                try {
+                    JSONObject userInfoObject = new JSONObject(response.getString("userInfo"));
+                    String token = userInfoObject.getString("token");
+                    // Toast.makeText(LoginActivity.this, "Token generated", Toast.LENGTH_SHORT).show();
+                    Log.i("Token", "t" + token);
+
+                    if (token != null) {
+                        generateSite_desc(token);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Volley ", "response" + "That didn't work!");
+                Intent i = new Intent(Page_Login.this, Page_Login.class);
+                i.putExtra("Name", edtLoginEmail.getText());
+                i.putExtra("Password", edtLoginPassword.getText());
+                startActivity(i);
+            }
+        };
+
+        Token token = new Token(mResultCallback, this);
+//        Token token=new Token(this);
+//        String Tokenstat=token.getToken();
+//       if(Tokenstat!=null)
+//                            {
+//                                generatestatus(Tokenstat);
+//                            }
+//                            else {
+//
+//                                Toast.makeText( LoginActivity.this,"Connexion error", Toast.LENGTH_SHORT).show();
+//                            }
+//
+
+
+    }
+
+    private void generateSite_desc(String tokenStatus) {
+        //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
+        // RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
+        Url=new Url(getApplicationContext());
+        String url = Url.getUrl() + "orchestrator/ORCH_GetUDC";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                bodyForSite_descRequest(tokenStatus),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject DR_GetUDC = new JSONObject(response.getString("DR_GetUDC"));
+                            JSONArray rowSet = DR_GetUDC.getJSONArray("rowset");
+                            Log.i("details", rowSet + "");
+                            StringBuilder stringToShow = new StringBuilder();
+                            for (int i = 0; i < rowSet.length(); i++) {
+                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+
+
+                                String Observation =
+                                        "Code: " + (elementFromRow.getString("Code")) + " " +
+                                                //"OperSeq: " + (elementFromRow.getString("OperSeq"))+ " "+
+                                                "Description: " + (elementFromRow.getString("Description"));
+
+                                Log.i("String details", Observation + "");
+//                                MyDataBaseHelper db = new MyDataBaseHelper(Page_Login.this);
+//                                db.add_Details("E", elementFromRow.getString("Code"), elementFromRow.getString("Description"));
+//                                db.close();
+
+                                Site_desc.add(new T_Details("UB", elementFromRow.getString("Code"), elementFromRow.getString("Description")));
+                                if(i==rowSet.length()-1){
+                                    check_site=true;
+
+                                }
+                            }
+                            if( check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
+
+                            }
+
+                        } catch (JSONException e) {
+
+                            Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                            Log.i("CACHE", e.getMessage() + "");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Error", error.toString());
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500000000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(Page_Login.this).addToRequestQueue1(jsonObjectRequest);
+    }
+
+    private JSONObject bodyForSite_descRequest(String token) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("token", token);
+            body.put("Product_Code", "90CA");
+            body.put("UserDefinedCodes", "UB");
+            return body;
+        } catch (JSONException e) {
+
+            Toast.makeText(this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+            Log.i("bodyForSite_descRequest", e.getMessage());
+            return null;
+        }
+    }
+
+
+    private void generateTokenCommune_desc() {
+
+        IResult mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(JSONObject response) {
+                Log.i("Volley ", "response" + response);
+                try {
+                    JSONObject userInfoObject = new JSONObject(response.getString("userInfo"));
+                    String token = userInfoObject.getString("token");
+                    // Toast.makeText(LoginActivity.this, "Token generated", Toast.LENGTH_SHORT).show();
+                    Log.i("Token", "t" + token);
+
+                    if (token != null) {
+                        generateCommune_desc(token);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Volley ", "response" + "That didn't work!");
+                Intent i = new Intent(Page_Login.this, Page_Login.class);
+                i.putExtra("Name", edtLoginEmail.getText());
+                i.putExtra("Password", edtLoginPassword.getText());
+                startActivity(i);
+            }
+        };
+
+        Token token = new Token(mResultCallback, this);
+//        Token token=new Token(this);
+//        String Tokenstat=token.getToken();
+//       if(Tokenstat!=null)
+//                            {
+//                                generatestatus(Tokenstat);
+//                            }
+//                            else {
+//
+//                                Toast.makeText( LoginActivity.this,"Connexion error", Toast.LENGTH_SHORT).show();
+//                            }
+//
+
+
+    }
+
+    private void generateCommune_desc(String tokenStatus) {
+        //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
+        // RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
+        Url=new Url(getApplicationContext());
+        String url = Url.getUrl() + "orchestrator/ORCH_GetUDC";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                bodyForCommune_descRequest(tokenStatus),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject DR_GetUDC = new JSONObject(response.getString("DR_GetUDC"));
+                            JSONArray rowSet = DR_GetUDC.getJSONArray("rowset");
+                            Log.i("details", rowSet + "");
+                            StringBuilder stringToShow = new StringBuilder();
+                            for (int i = 0; i < rowSet.length(); i++) {
+                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+
+
+                                String Observation =
+                                        "Code: " + (elementFromRow.getString("Code")) + " " +
+                                                //"OperSeq: " + (elementFromRow.getString("OperSeq"))+ " "+
+                                                "Description: " + (elementFromRow.getString("Description"));
+
+                                Log.i("String details", Observation + "");
+//                                MyDataBaseHelper db = new MyDataBaseHelper(Page_Login.this);
+//                                db.add_Details("E", elementFromRow.getString("Code"), elementFromRow.getString("Description"));
+//                                db.close();
+
+                                Commune_desc.add(new T_Details("UC", elementFromRow.getString("Code"), elementFromRow.getString("Description")));
+                                if(i==rowSet.length()-1){
+                                    check_communne=true;
+
+                                }
+                            }
+                            if( check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
+
+                            }
+
+                        } catch (JSONException e) {
+
+                            Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                            Log.i("CACHE", e.getMessage() + "");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Error", error.toString());
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500000000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(Page_Login.this).addToRequestQueue1(jsonObjectRequest);
+    }
+
+    private JSONObject bodyForCommune_descRequest(String token) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("token", token);
+            body.put("Product_Code", "90CA");
+            body.put("UserDefinedCodes", "UC");
+            return body;
+        } catch (JSONException e) {
+
+            Toast.makeText(this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+            Log.i("bodyForCommune_descRequest", e.getMessage());
+            return null;
+        }
+    }
+
+
+
+    private void generateTokenQuartier_desc() {
+
+        IResult mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(JSONObject response) {
+                Log.i("Volley ", "response" + response);
+                try {
+                    JSONObject userInfoObject = new JSONObject(response.getString("userInfo"));
+                    String token = userInfoObject.getString("token");
+                    // Toast.makeText(LoginActivity.this, "Token generated", Toast.LENGTH_SHORT).show();
+                    Log.i("Token", "t" + token);
+
+                    if (token != null) {
+                        generateQuartier_desc(token);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Volley ", "response" + "That didn't work!");
+                Intent i = new Intent(Page_Login.this, Page_Login.class);
+                i.putExtra("Name", edtLoginEmail.getText());
+                i.putExtra("Password", edtLoginPassword.getText());
+                startActivity(i);
+            }
+        };
+
+        Token token = new Token(mResultCallback, this);
+//        Token token=new Token(this);
+//        String Tokenstat=token.getToken();
+//       if(Tokenstat!=null)
+//                            {
+//                                generatestatus(Tokenstat);
+//                            }
+//                            else {
+//
+//                                Toast.makeText( LoginActivity.this,"Connexion error", Toast.LENGTH_SHORT).show();
+//                            }
+//
+
+
+    }
+
+    private void generateQuartier_desc(String tokenStatus) {
+        //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
+        // RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
+        Url=new Url(getApplicationContext());
+        String url = Url.getUrl() + "orchestrator/ORCH_GetUDC";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                bodyForQuartier_descRequest(tokenStatus),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject DR_GetUDC = new JSONObject(response.getString("DR_GetUDC"));
+                            JSONArray rowSet = DR_GetUDC.getJSONArray("rowset");
+                            Log.i("details", rowSet + "");
+                            StringBuilder stringToShow = new StringBuilder();
+                            for (int i = 0; i < rowSet.length(); i++) {
+                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+
+
+                                String Observation =
+                                        "Code: " + (elementFromRow.getString("Code")) + " " +
+                                                //"OperSeq: " + (elementFromRow.getString("OperSeq"))+ " "+
+                                                "Description: " + (elementFromRow.getString("Description"));
+
+                                Log.i("String details", Observation + "");
+//                                MyDataBaseHelper db = new MyDataBaseHelper(Page_Login.this);
+//                                db.add_Details("E", elementFromRow.getString("Code"), elementFromRow.getString("Description"));
+//                                db.close();
+
+                                Quartier_desc.add(new T_Details("UD", elementFromRow.getString("Code"), elementFromRow.getString("Description")));
+                                if(i==rowSet.length()-1){
+                                    check_quartier=true;
+
+                                }
+                            }
+                            if( check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
+
+                            }
+
+                        } catch (JSONException e) {
+
+                            Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                            Log.i("CACHE", e.getMessage() + "");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Error", error.toString());
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500000000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(Page_Login.this).addToRequestQueue1(jsonObjectRequest);
+    }
+
+    private JSONObject bodyForQuartier_descRequest(String token) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("token", token);
+            body.put("Product_Code", "90CA");
+            body.put("UserDefinedCodes", "UD");
+            return body;
+        } catch (JSONException e) {
+
+            Toast.makeText(this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+            Log.i("bodyForQuartier_descRequest", e.getMessage());
+            return null;
+        }
+    }
+
+
+
+    private void generateTokenStatus_Equipment() {
+
+        IResult mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(JSONObject response) {
+                Log.i("Volley ", "response" + response);
+                try {
+                    JSONObject userInfoObject = new JSONObject(response.getString("userInfo"));
+                    String token = userInfoObject.getString("token");
+                    // Toast.makeText(LoginActivity.this, "Token generated", Toast.LENGTH_SHORT).show();
+                    Log.i("Token", "t" + token);
+
+                    if (token != null) {
+                        generateStatus_Equipment(token);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Volley ", "response" + "That didn't work!");
+                Intent i = new Intent(Page_Login.this, Page_Login.class);
+                i.putExtra("Name", edtLoginEmail.getText());
+                i.putExtra("Password", edtLoginPassword.getText());
+                startActivity(i);
+            }
+        };
+
+        Token token = new Token(mResultCallback, this);
+//        Token token=new Token(this);
+//        String Tokenstat=token.getToken();
+//       if(Tokenstat!=null)
+//                            {
+//                                generatestatus(Tokenstat);
+//                            }
+//                            else {
+//
+//                                Toast.makeText( LoginActivity.this,"Connexion error", Toast.LENGTH_SHORT).show();
+//                            }
+//
+
+
+    }
+
+    private void generateStatus_Equipment(String tokenStatus) {
+        //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
+        // RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
+        Url=new Url(getApplicationContext());
+        String url = Url.getUrl() + "orchestrator/ORCH_GetUDC";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                bodyForStatus_EquipmentRequest(tokenStatus),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject DR_GetUDC = new JSONObject(response.getString("DR_GetUDC"));
+                            JSONArray rowSet = DR_GetUDC.getJSONArray("rowset");
+                            Log.i("details", rowSet + "");
+                            StringBuilder stringToShow = new StringBuilder();
+                            for (int i = 0; i < rowSet.length(); i++) {
+                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+
+
+                                String Observation =
+                                        "Code: " + (elementFromRow.getString("Code")) + " " +
+                                                //"OperSeq: " + (elementFromRow.getString("OperSeq"))+ " "+
+                                                "Description: " + (elementFromRow.getString("Description"));
+
+                                Log.i("String details", Observation + "");
+//                                MyDataBaseHelper db = new MyDataBaseHelper(Page_Login.this);
+//                                db.add_Details("E", elementFromRow.getString("Code"), elementFromRow.getString("Description"));
+//                                db.close();
+
+                                Status_Equipments.add(new T_Details("ES", elementFromRow.getString("Code"), elementFromRow.getString("Description")));
+                                if(i==rowSet.length()-1){
+                                    check_status_Equipment=true;
+
+                                }
+                            }
+                            if(check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
+
+                            }
+
+                        } catch (JSONException e) {
+
+                            Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                            Log.i("CACHE", e.getMessage() + "");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Error", error.toString());
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500000000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(Page_Login.this).addToRequestQueue1(jsonObjectRequest);
+    }
+
+    private JSONObject bodyForStatus_EquipmentRequest(String token) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("token", token);
+            body.put("Product_Code", "12");
+            body.put("UserDefinedCodes", "ES");
+            return body;
+        } catch (JSONException e) {
+
+            Toast.makeText(this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+            Log.i("bodyForStatus_EquipmentRequest", e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
+
+    private void generateTokenTypeWO() {
+
+        IResult mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(JSONObject response) {
+                Log.i("Volley ", "response" + response);
+                try {
+                    JSONObject userInfoObject = new JSONObject(response.getString("userInfo"));
+                    String token = userInfoObject.getString("token");
+                    // Toast.makeText(LoginActivity.this, "Token generated", Toast.LENGTH_SHORT).show();
+                    Log.i("Token", "t" + token);
+
+                    if (token != null) {
+                        generateTypeWO(token);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Volley ", "response" + "That didn't work!");
+                Intent i = new Intent(Page_Login.this, Page_Login.class);
+                i.putExtra("Name", edtLoginEmail.getText());
+                i.putExtra("Password", edtLoginPassword.getText());
+                startActivity(i);
+            }
+        };
+
+        Token token = new Token(mResultCallback, this);
+//        Token token=new Token(this);
+//        String Tokenstat=token.getToken();
+//       if(Tokenstat!=null)
+//                            {
+//                                generatestatus(Tokenstat);
+//                            }
+//                            else {
+//
+//                                Toast.makeText( LoginActivity.this,"Connexion error", Toast.LENGTH_SHORT).show();
+//                            }
+//
+
+
+    }
+
+    private void generateTypeWO(String tokenStatus) {
+        //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
+        // RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
+        Url=new Url(getApplicationContext());
+        String url = Url.getUrl() + "orchestrator/ORCH_GetUDC";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                bodyForTypeWORequest(tokenStatus),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject DR_GetUDC = new JSONObject(response.getString("DR_GetUDC"));
+                            JSONArray rowSet = DR_GetUDC.getJSONArray("rowset");
+                            Log.i("details", rowSet + "");
+                            StringBuilder stringToShow = new StringBuilder();
+                            for (int i = 0; i < rowSet.length(); i++) {
+                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+
+
+                                String Observation =
+                                        "Code: " + (elementFromRow.getString("Code")) + " " +
+                                                //"OperSeq: " + (elementFromRow.getString("OperSeq"))+ " "+
+                                                "Description: " + (elementFromRow.getString("Description"));
+
+                                Log.i("String details", Observation + "");
+//                                MyDataBaseHelper db = new MyDataBaseHelper(Page_Login.this);
+//                                db.add_Details("E", elementFromRow.getString("Code"), elementFromRow.getString("Description"));
+//                                db.close();
+
+                                Types.add(new T_Details("DT", elementFromRow.getString("Code"), elementFromRow.getString("Description")));
+                                if(i==rowSet.length()-1){
+                                    check_types=true;
+
+                                }
+                            }
+
+                            if( check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
+
+                            }
+
+                        } catch (JSONException e) {
+
+                            Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                            Log.i("CACHE", e.getMessage() + "");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Error", error.toString());
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500000000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(Page_Login.this).addToRequestQueue1(jsonObjectRequest);
+    }
+
+    private JSONObject bodyForTypeWORequest(String token) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("token", token);
+            body.put("Product_Code", "00");
+            body.put("UserDefinedCodes", "DT");
+            return body;
+        } catch (JSONException e) {
+
+            Toast.makeText(this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+            Log.i("bodyForTypeWORequest", e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
+
+    private void generateTokenSousTypeWO() {
+
+        IResult mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(JSONObject response) {
+                Log.i("Volley ", "response" + response);
+                try {
+                    JSONObject userInfoObject = new JSONObject(response.getString("userInfo"));
+                    String token = userInfoObject.getString("token");
+                    // Toast.makeText(LoginActivity.this, "Token generated", Toast.LENGTH_SHORT).show();
+                    Log.i("Token", "t" + token);
+
+                    if (token != null) {
+                        generateSousTypeWO(token);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Volley ", "response" + "That didn't work!");
+                Intent i = new Intent(Page_Login.this, Page_Login.class);
+                i.putExtra("Name", edtLoginEmail.getText());
+                i.putExtra("Password", edtLoginPassword.getText());
+                startActivity(i);
+            }
+        };
+
+        Token token = new Token(mResultCallback, this);
+//        Token token=new Token(this);
+//        String Tokenstat=token.getToken();
+//       if(Tokenstat!=null)
+//                            {
+//                                generatestatus(Tokenstat);
+//                            }
+//                            else {
+//
+//                                Toast.makeText( LoginActivity.this,"Connexion error", Toast.LENGTH_SHORT).show();
+//                            }
+//
+
+
+    }
+
+    private void generateSousTypeWO(String tokenStatus) {
+        //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
+        // RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
+        Url=new Url(getApplicationContext());
+        String url = Url.getUrl() + "orchestrator/ORCH_GetUDC";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                bodyForSousTypeWORequest(tokenStatus),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject DR_GetUDC = new JSONObject(response.getString("DR_GetUDC"));
+                            JSONArray rowSet = DR_GetUDC.getJSONArray("rowset");
+                            Log.i("details", rowSet + "");
+                            StringBuilder stringToShow = new StringBuilder();
+                            for (int i = 0; i < rowSet.length(); i++) {
+                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+
+
+                                String Observation =
+                                        "Code: " + (elementFromRow.getString("Code")) + " " +
+                                                //"OperSeq: " + (elementFromRow.getString("OperSeq"))+ " "+
+                                                "Description: " + (elementFromRow.getString("Description"));
+
+                                Log.i("String details", Observation + "");
+//                                MyDataBaseHelper db = new MyDataBaseHelper(Page_Login.this);
+//                                db.add_Details("E", elementFromRow.getString("Code"), elementFromRow.getString("Description"));
+//                                db.close();
+
+                                Sous_Types.add(new T_Details("TY", elementFromRow.getString("Code"), elementFromRow.getString("Description")));
+                                if(i==rowSet.length()-1){
+                                    check_sous_type=true;
+
+                                }
+                            }
+                            if( check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
+
+                            }
+
+                        } catch (JSONException e) {
+
+                            Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                            Log.i("CACHE", e.getMessage() + "");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Error", error.toString());
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500000000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(Page_Login.this).addToRequestQueue1(jsonObjectRequest);
+    }
+
+    private JSONObject bodyForSousTypeWORequest(String token) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("token", token);
+            body.put("Product_Code", "00");
+            body.put("UserDefinedCodes", "TY");
+            return body;
+        } catch (JSONException e) {
+
+            Toast.makeText(this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+            Log.i("bodyForSousTypeWORequest", e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
+
+    private void generateTokenPriorites() {
+
+        IResult mResultCallback = new IResult() {
+            @Override
+            public void notifySuccess(JSONObject response) {
+                Log.i("Volley ", "response" + response);
+                try {
+                    JSONObject userInfoObject = new JSONObject(response.getString("userInfo"));
+                    String token = userInfoObject.getString("token");
+                    // Toast.makeText(LoginActivity.this, "Token generated", Toast.LENGTH_SHORT).show();
+                    Log.i("Token", "t" + token);
+
+                    if (token != null) {
+                        generatePriorites(token);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void notifyError(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Volley ", "response" + "That didn't work!");
+                Intent i = new Intent(Page_Login.this, Page_Login.class);
+                i.putExtra("Name", edtLoginEmail.getText());
+                i.putExtra("Password", edtLoginPassword.getText());
+                startActivity(i);
+            }
+        };
+
+        Token token = new Token(mResultCallback, this);
+//        Token token=new Token(this);
+//        String Tokenstat=token.getToken();
+//       if(Tokenstat!=null)
+//                            {
+//                                generatestatus(Tokenstat);
+//                            }
+//                            else {
+//
+//                                Toast.makeText( LoginActivity.this,"Connexion error", Toast.LENGTH_SHORT).show();
+//                            }
+//
+
+
+    }
+
+    private void generatePriorites(String tokenStatus) {
+        //RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().stop();
+        // RequestQueueSingleton.getInstance(LoginActivity.this).getRequestQueue().start();
+        Url=new Url(getApplicationContext());
+        String url = Url.getUrl() + "orchestrator/ORCH_GetUDC";
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                url,
+                bodyForPrioritesRequest(tokenStatus),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+
+                            JSONObject DR_GetUDC = new JSONObject(response.getString("DR_GetUDC"));
+                            JSONArray rowSet = DR_GetUDC.getJSONArray("rowset");
+                            Log.i("details", rowSet + "");
+                            StringBuilder stringToShow = new StringBuilder();
+                            for (int i = 0; i < rowSet.length(); i++) {
+                                JSONObject elementFromRow = new JSONObject(rowSet.getString(i));
+
+
+                                String Observation =
+                                        "Code: " + (elementFromRow.getString("Code")) + " " +
+                                                //"OperSeq: " + (elementFromRow.getString("OperSeq"))+ " "+
+                                                "Description: " + (elementFromRow.getString("Description"));
+
+                                Log.i("String details", Observation + "");
+//                                MyDataBaseHelper db = new MyDataBaseHelper(Page_Login.this);
+//                                db.add_Details("E", elementFromRow.getString("Code"), elementFromRow.getString("Description"));
+//                                db.close();
+
+                                Priorities.add(new T_Details("PR", elementFromRow.getString("Code"), elementFromRow.getString("Description")));
+                                if(i==rowSet.length()-1){
+                                    check_priority=true;
+
+                                }
+                            }
+                            if(check_communne==true && check_quartier==true && check_site==true && check_Status == true && check_orders==true && check_status_Equipment==true && check_priority==true && check_types==true && check_sous_type==true){
+                                Insert_Data_database();
+                                Log.i("Insert", "done");
+
+                            }
+
+                        } catch (JSONException e) {
+
+                            Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                            Log.i("CACHE", e.getMessage() + "");
+                        }
+                    }
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(Page_Login.this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+                Log.i("Error", error.toString());
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(500000000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        RequestQueueSingleton.getInstance(Page_Login.this).addToRequestQueue1(jsonObjectRequest);
+    }
+
+    private JSONObject bodyForPrioritesRequest(String token) {
+        JSONObject body = new JSONObject();
+        try {
+            body.put("token", token);
+            body.put("Product_Code", "00");
+            body.put("UserDefinedCodes", "PR");
+            return body;
+        } catch (JSONException e) {
+
+            Toast.makeText(this, "erreur de connexion", Toast.LENGTH_SHORT).show();
+            Log.i("bodyForPrioritesRequest", e.getMessage());
+            return null;
+        }
+    }
+
+
+
+
+
+
 
     public void Insert_Data_database() {
         if (!finish) {
@@ -700,13 +1891,40 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
                 db.addOrder(
                         Orders.get(i).getType(),
                         Orders.get(i).getSous_type(),
+                        Orders.get(i).getClient_number(),
                         Orders.get(i).getOrder_number(),
+                        Orders.get(i).getEquipment_number(),
                         Orders.get(i).getStart_date(),
                         Orders.get(i).getDescription(),
                         Orders.get(i).getOrder_date(),
                         Orders.get(i).getPriority(),
-                        Orders.get(i).getWork_status(),
+                        Orders.get(i).getClient_name(),
+                        Orders.get(i).getProblem(),
+                        Orders.get(i).getLongitude(),
+                        Orders.get(i).getLatitude(),
+                        Orders.get(i).getstatus(),
+                        Orders.get(i).getService_address(),
+                        Orders.get(i).getEquipment_description(),
+                        Orders.get(i).getEquipment_status(),
+                        Orders.get(i).getPhone_area_code(),
+                        Orders.get(i).getPhone_number(),
+                        Orders.get(i).getEmail_address(),
+                        Orders.get(i).getAddress_line1(),
+                        Orders.get(i).getAddress_line2(),
+                        Orders.get(i).getInstallation_code(),
+                        Orders.get(i).getPuissance(),
+                        Orders.get(i).getTarif(),
+                        Orders.get(i).getAmperage(),
+                        Orders.get(i).getSite(),
+                        Orders.get(i).getCommune(),
+                        Orders.get(i).getQuartier(),
+                        Orders.get(i).getAddress_Installation(),
+                        "",
+                        Orders.get(i).getEdited(),
                         Db_UserId);
+
+
+
 
                 if(i == Orders.size()-1){
                     Intent in  = new Intent(Page_Login.this, Page_Order.class);
@@ -716,12 +1934,51 @@ public class Page_Login extends AppCompatActivity implements NavigationView.OnNa
                 }
 
             }
-//            for(int i=0; i<ListElements.size() ; i++){
-//                db.delete_order_byId(ListElements.get(i).getId());
-//            }
+
             // insert status Udc
+            Log.i("Statussize", Status.size() + "  ");
             for (int j = 0; j < Status.size(); j++) {
+                Log.i("Status_workorder_j", Status.get(j).getType() +"/"+ Status.get(j).getCode() +"/"+Status.get(j).getObservation()+ "  ");
                 db.add_Details(Status.get(j).getType(), Status.get(j).getCode(), Status.get(j).getObservation());
+
+            }
+
+
+            for (int j = 0; j < Types.size(); j++) {
+                db.add_Details(Types.get(j).getType(), Types.get(j).getCode(), Types.get(j).getObservation());
+
+            }
+
+
+            for (int j = 0; j < Sous_Types.size(); j++) {
+                db.add_Details(Sous_Types.get(j).getType(), Sous_Types.get(j).getCode(), Sous_Types.get(j).getObservation());
+
+            }
+
+
+            for (int j = 0; j < Status_Equipments.size(); j++) {
+                db.add_Details(Status_Equipments.get(j).getType(), Status_Equipments.get(j).getCode(), Status_Equipments.get(j).getObservation());
+
+            }
+
+
+            for (int j = 0; j < Priorities.size(); j++) {
+                db.add_Details(Priorities.get(j).getType(), Priorities.get(j).getCode(), Priorities.get(j).getObservation());
+
+            }
+
+            for (int j = 0; j < Site_desc.size(); j++) {
+                db.add_Details(Site_desc.get(j).getType(), Site_desc.get(j).getCode(), Site_desc.get(j).getObservation());
+
+            }
+
+            for (int j = 0; j < Quartier_desc.size(); j++) {
+                db.add_Details(Quartier_desc.get(j).getType(), Quartier_desc.get(j).getCode(), Quartier_desc.get(j).getObservation());
+
+            }
+
+            for (int j = 0; j < Commune_desc.size(); j++) {
+                db.add_Details(Commune_desc.get(j).getType(), Commune_desc.get(j).getCode(), Commune_desc.get(j).getObservation());
 
             }
         }

@@ -1,6 +1,5 @@
 package com.example.login_signup;
 
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -47,23 +45,43 @@ public class  MyDataBaseHelper extends SQLiteOpenHelper {
 //    private static final String COLUMN_CONFIRM_PASSWORD = "Confirm_password";
 //    private static final String COLUMN_CONFIRM_PASSWORD1 = "Confirm_password";
 
-  // My_Work_Orders - column names
+    // My_Work_Orders - column names
     private static final String COLUMN_TYPE = "Type";
     private static final String COLUMN_SOUS_TYPE = "Sous_Type";
+    private static final String COLUMN_CLIENT_NUMBER= "Client_Number";
     private static final String COLUMN_ORDERNUMBER = "Order_Number";
+    private static final String COLUMN_EQUIPMENT_NUMBER = "Equipment_Number";
     private static final String COLUMN_STARTDATE = "Start_Date";
     private static final String COLUMN_DESCRIPTION = "Description";
     private static final String COLUMN_ORDERDATE = "Order_Date";
     private static final String COLUMN_PRIORITY = "Priority";
-    private static final String COLUMN_WORK_STATUS = "Work_Status";
+    private static final String COLUMN_CLIENT_NAME = "Client_Name";
+    private static final String COLUMN_PROBLEM= "Problem";
+    private static final String COLUMN_LONGITUDE= "Longitude";
+    private static final String COLUMN_LATITUDE= "Latitude";
+    private static final String COLUMN_STATUS = "Status";
+    private static final String COLUMN_SERVICE_ADDRESS = "Service_Address";
     private static final String COLUMN_OBSERVATION = "Observation";
-//    private static final String COLUMN_EQUIPMENT_NUMBER = "Equipment_Number";
-//    private static final String COLUMN_EQUIPMENT_DESCRIPTION = "Equipment_Description";
-//    private static final String COLUMN_CLIENT_NAME = "Client_Name";
-//    private static final String COLUMN_CLIENT_NUMBER= "Client_Number";
+    private static final String COLUMN_EQUIPMENT_DESCRIPTION = "Equipment_Description";
+    private static final String COLUMN_EQUIPMENT_STATUS = "Equipment_Status";
+    private static final String COLUMN_PHONE_AREA_CODE = "Phone_Area";
+    private static final String COLUMN_PHONE_NUMBER = "Phone_Number";
+    private static final String COLUMN_EMAIL_ADDRESS = "Email_Address";
+    private static final String COLUMN_ADDRESS_LINE1 = "Address_Line1";
+    private static final String COLUMN_ADDRESS_LINE2 = "Address_Line2";
+    private static final String COLUMN_INSTALLATION_CODE = "Installation_Code";
+    private static final String COLUMN_PUISSANCE = "Puissance";
+    private static final String COLUMN_TARIF = "Tarif";
+    private static final String COLUMN_AMPERAGE = "Amperage";
+    private static final String COLUMN_SITE = "Site";
+    private static final String COLUMN_COMMUNE= "Commune";
+    private static final String COLUMN_QUARTIER = "Quartier";
+    private static final String COLUMN_ADDRESS_INSTALLATION= "Address_Installation";
+    private static final String COLUMN_EDITED= "Edited";
+    private static final String COLUMN_NOTES= "Notes";
 
 
-   //private static final String COLUMN_ESTIMATEDHOURS = "Estimated_Hours";
+    //private static final String COLUMN_ESTIMATEDHOURS = "Estimated_Hours";
 
 
     // Settings   - column names
@@ -99,12 +117,37 @@ public class  MyDataBaseHelper extends SQLiteOpenHelper {
             COLUMN_USERID + " INTEGER, "+
             COLUMN_TYPE + " TEXT, " +
             COLUMN_SOUS_TYPE + " TEXT, " +
+            COLUMN_CLIENT_NUMBER + " INTEGER, " +
             COLUMN_ORDERNUMBER+ " INTEGER, " +
+            COLUMN_EQUIPMENT_NUMBER + " INTEGER, " +
             COLUMN_STARTDATE + " TEXT, " +
             COLUMN_DESCRIPTION + " TEXT, " +
             COLUMN_ORDERDATE + " TEXT, " +
             COLUMN_PRIORITY + " TEXT, " +
-            COLUMN_WORK_STATUS + " TEXT); ";
+            COLUMN_CLIENT_NAME + " TEXT, " +
+            COLUMN_PROBLEM + " TEXT, " +
+            COLUMN_LONGITUDE + " DOUBLE, " +
+            COLUMN_LATITUDE + " DOUBLE, " +
+            COLUMN_STATUS + " TEXT, "+
+            COLUMN_SERVICE_ADDRESS+ " INTEGER, "+
+            COLUMN_EQUIPMENT_DESCRIPTION + " TEXT, " +
+            COLUMN_EQUIPMENT_STATUS + " TEXT, " +
+            COLUMN_PHONE_AREA_CODE + " TEXT, " +
+            COLUMN_PHONE_NUMBER + " TEXT, " +
+            COLUMN_EMAIL_ADDRESS+ " TEXT, " +
+            COLUMN_ADDRESS_LINE1 + " TEXT, " +
+            COLUMN_ADDRESS_LINE2 + " TEXT, " +
+            COLUMN_INSTALLATION_CODE + " TEXT, " +
+            COLUMN_PUISSANCE + " TEXT, " +
+            COLUMN_TARIF + " TEXT, " +
+            COLUMN_AMPERAGE + " TEXT, " +
+            COLUMN_SITE + " TEXT, " +
+            COLUMN_COMMUNE + " TEXT, " +
+            COLUMN_QUARTIER + " TEXT, " +
+            COLUMN_ADDRESS_INSTALLATION + " TEXT, "+
+            COLUMN_NOTES+ " TEXT, "+
+            COLUMN_EDITED+ " INTEGER); ";
+
 
 
     private static final String createsettings  = "CREATE TABLE " + TABLE_NAME2 +
@@ -117,9 +160,9 @@ public class  MyDataBaseHelper extends SQLiteOpenHelper {
 
     private static final String createdetails = "CREATE TABLE " + TABLE_NAME3 +
             " (" +
-            COLUMN_CODE + " TEXT PRIMARY KEY , " +
+            COLUMN_CODE + " TEXT , " +
             COLUMN_TYPE + " TEXT, " +
-            COLUMN_OBSERVATION + " TEXT); ";
+            COLUMN_OBSERVATION + " TEXT , PRIMARY KEY("+COLUMN_CODE + ","+COLUMN_TYPE+")); ";
 
 
     @Override
@@ -354,20 +397,45 @@ public class  MyDataBaseHelper extends SQLiteOpenHelper {
         }
 
     }
-    void addOrder( String type,String sous_type ,Integer order_number,String start_date, String description,String order_date, String priority , String work_status,Integer user_id) {
+    void addOrder(String type, String sous_type , Integer client_number , Integer order_number, Integer equipment_number , String start_date, String description, String order_date, String priority , String client_name, String problem , Double longitude , Double latitude , String status, Integer service_address, String equipment_description , String equipment_status, String phone_area_code , String phone_number , String email_address, String address_line1 , String address_line2 , String installation_code , String puissance , String tarif , String amperage, String site , String commune , String quartier, String address_installation, String notes, Integer edited,  Integer user_id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
 
         cv.put(COLUMN_TYPE, type);
         cv.put(COLUMN_SOUS_TYPE, sous_type);
+        cv.put(COLUMN_CLIENT_NUMBER, client_number);
         cv.put(COLUMN_ORDERNUMBER, order_number);
+        cv.put(COLUMN_EQUIPMENT_NUMBER, equipment_number);
         cv.put(COLUMN_STARTDATE, start_date);
         cv.put(COLUMN_DESCRIPTION, description);
         cv.put(COLUMN_ORDERDATE, order_date);
         cv.put(COLUMN_PRIORITY, priority);
+        cv.put(COLUMN_CLIENT_NAME, client_name);
+        cv.put(COLUMN_PROBLEM, problem);
+        cv.put(COLUMN_LONGITUDE, longitude);
+        cv.put(COLUMN_LATITUDE, latitude);
+        cv.put(COLUMN_STATUS, status);
+        cv.put(COLUMN_SERVICE_ADDRESS, service_address);
+        cv.put(COLUMN_EQUIPMENT_DESCRIPTION, equipment_description);
+        cv.put(COLUMN_EQUIPMENT_STATUS, equipment_status);
+        cv.put(COLUMN_PHONE_AREA_CODE, phone_area_code);
+        cv.put(COLUMN_PHONE_NUMBER, phone_number);
+        cv.put(COLUMN_EMAIL_ADDRESS, email_address);
+        cv.put(COLUMN_ADDRESS_LINE1, address_line1);
+        cv.put(COLUMN_ADDRESS_LINE2, address_line2);
+        cv.put(COLUMN_INSTALLATION_CODE, installation_code);
+        cv.put(COLUMN_PUISSANCE, puissance);
+        cv.put(COLUMN_TARIF, tarif);
+        cv.put(COLUMN_AMPERAGE, amperage);
+        cv.put(COLUMN_SITE, site);
+        cv.put(COLUMN_COMMUNE, commune);
+        cv.put(COLUMN_QUARTIER, quartier);
+        cv.put(COLUMN_ADDRESS_INSTALLATION, address_installation);
+        cv.put(COLUMN_NOTES, notes);
+        cv.put(COLUMN_EDITED, edited);
         cv.put(COLUMN_USERID,user_id);
-        cv.put(COLUMN_WORK_STATUS, work_status);
+
 
 
 
@@ -380,41 +448,65 @@ public class  MyDataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public T_Orders readOrder_ById( Integer UserId , Integer order_id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        // on below line we are creating a cursor with query to read data from database.
+        Cursor cursorOrder = db.rawQuery("SELECT * FROM " + TABLE_NAME1 + " WHERE "+ COLUMN_USERID + "=? AND "+ COLUMN_ID + "=?",new String[]{String.valueOf(UserId ),String.valueOf(order_id)});
 
-        public T_Orders readOrder_ById( Integer UserId , Integer order_id) {
-            SQLiteDatabase db = this.getReadableDatabase();
-            // on below line we are creating a cursor with query to read data from database.
-            Cursor cursorOrder = db.rawQuery("SELECT * FROM " + TABLE_NAME1 + " WHERE "+ COLUMN_USERID + "=? AND "+ COLUMN_ID + "=?",new String[]{String.valueOf(UserId ),String.valueOf(order_id)});
+        // on below line we are creating a new array list.
+        T_Orders Order = null;
 
-            // on below line we are creating a new array list.
-            T_Orders Order = null;
+        Log.i("cursor", cursorOrder.toString());
+        // moving our cursor to first position.
+        if (cursorOrder.moveToFirst()) {
 
-            Log.i("cursor", cursorOrder.toString());
-            // moving our cursor to first position.
-            if (cursorOrder.moveToFirst()) {
+            // on below line we are adding the data from cursor to our array list.
+            Order=  new T_Orders(cursorOrder.getInt(0),
+                    cursorOrder.getInt(1),
+                    cursorOrder.getString(2),
+                    cursorOrder.getString(3),
+                    cursorOrder.getInt(4),
+                    cursorOrder.getInt(5),
+                    cursorOrder.getInt(6),
+                    cursorOrder.getString(7),
+                    cursorOrder.getString(8),
+                    cursorOrder.getString(9),
+                    cursorOrder.getString(10),
+                    cursorOrder.getString(11),
+                    cursorOrder.getString(12),
+                    cursorOrder.getDouble(13),
+                    cursorOrder.getDouble(14),
+                    cursorOrder.getString(15),
+                    cursorOrder.getInt(16),
+                    cursorOrder.getString(17),
+                    cursorOrder.getString(18),
+                    cursorOrder.getString(19),
+                    cursorOrder.getString(20),
+                    cursorOrder.getString(21),
+                    cursorOrder.getString(22),
+                    cursorOrder.getString(23),
+                    cursorOrder.getString(24),
+                    cursorOrder.getString(25),
+                    cursorOrder.getString(26),
+                    cursorOrder.getString(27),
+                    cursorOrder.getString(28),
+                    cursorOrder.getString(29),
+                    cursorOrder.getString(30),
+                    cursorOrder.getString(31),
+                    cursorOrder.getString(32),
+                    cursorOrder.getInt(33)
 
-                    // on below line we are adding the data from cursor to our array list.
-                Order= new T_Orders(cursorOrder.getInt(0),
-                            cursorOrder.getInt(1),
-                            cursorOrder.getString(2),
-                            cursorOrder.getString(3),
-                            cursorOrder.getInt(4),
-                            cursorOrder.getString(5),
-                            cursorOrder.getString(6),
-                            cursorOrder.getString(7),
-                            cursorOrder.getString(8),
-                            cursorOrder.getString(9)
+            );
+        };
+        // moving our cursor to next.
 
-                    );
-                };
-                // moving our cursor to next.
-
-            // at last closing our cursor
-            // and returning our array list.
-            cursorOrder.close();
-            return Order;
+        // at last closing our cursor
+        // and returning our array list.
+        cursorOrder.close();
+        return Order;
 
     }
+
 
     public ArrayList<T_Orders> readOrder(Integer User_Id) {
         // on below line we are creating a
@@ -436,11 +528,35 @@ public class  MyDataBaseHelper extends SQLiteOpenHelper {
                         cursorOrder.getString(2),
                         cursorOrder.getString(3),
                         cursorOrder.getInt(4),
-                        cursorOrder.getString(5),
-                        cursorOrder.getString(6),
+                        cursorOrder.getInt(5),
+                        cursorOrder.getInt(6),
                         cursorOrder.getString(7),
                         cursorOrder.getString(8),
-                        cursorOrder.getString(9)
+                        cursorOrder.getString(9),
+                        cursorOrder.getString(10),
+                        cursorOrder.getString(11),
+                        cursorOrder.getString(12),
+                        cursorOrder.getDouble(13),
+                        cursorOrder.getDouble(14),
+                        cursorOrder.getString(15),
+                        cursorOrder.getInt(16),
+                        cursorOrder.getString(17),
+                        cursorOrder.getString(18),
+                        cursorOrder.getString(19),
+                        cursorOrder.getString(20),
+                        cursorOrder.getString(21),
+                        cursorOrder.getString(22),
+                        cursorOrder.getString(23),
+                        cursorOrder.getString(24),
+                        cursorOrder.getString(25),
+                        cursorOrder.getString(26),
+                        cursorOrder.getString(27),
+                        cursorOrder.getString(28),
+                        cursorOrder.getString(29),
+                        cursorOrder.getString(30),
+                        cursorOrder.getString(31),
+                        cursorOrder.getString(32),
+                        cursorOrder.getInt(33)
 
                 ));
             } while (cursorOrder.moveToNext());
@@ -451,6 +567,25 @@ public class  MyDataBaseHelper extends SQLiteOpenHelper {
         cursorOrder.close();
         return OrderModalArrayList;
     }
+
+
+    public void updateWorkOrder(String User_Id , String Id , String Notes, String Equipment_Status, String Status) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NOTES, Notes);
+        if(!Equipment_Status.equals(null)){
+            values.put(COLUMN_EQUIPMENT_STATUS, Equipment_Status);
+        }
+        values.put(COLUMN_EDITED,1);
+        values.put(COLUMN_STATUS, Status);
+
+        db.update(TABLE_NAME1, values, COLUMN_USERID + "=?" + " AND "  + COLUMN_ID + " =? " , new String[]{User_Id , Id});
+        db.close();
+    }
+
+
+
 
     public void delete_User(Integer User_Id){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -479,7 +614,7 @@ public class  MyDataBaseHelper extends SQLiteOpenHelper {
         // on below line we are creating a cursor with query to read data from database.
         Cursor cursorUser = db.rawQuery("SELECT * FROM " + TABLE_NAME3 + " WHERE " + COLUMN_TYPE + "=?" , new String[]{Type}  );
         // on below line we are creating a new array list.
-        ArrayList<T_Details> UserModalArrayList = new ArrayList<>();
+        ArrayList<T_Details> UserModalArrayList =new ArrayList<>();
 
         // moving our cursor to first position.
         if (cursorUser.moveToFirst()) {

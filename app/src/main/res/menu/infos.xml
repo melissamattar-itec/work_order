@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item android:title="appeler"
+        android:id="@+id/appeler"
+        android:icon="@drawable/ic_call"
+        >
+
+    </item>
+    <item android:title="envoyer un mail"
+        android:icon="@drawable/ic_mail"
+        android:id="@+id/mail">
+
+    </item>
+
+    <item android:title="envoyer un message"
+        android:icon="@drawable/ic_message1"
+        android:id="@+id/message">
+
+    </item>
+</menu>

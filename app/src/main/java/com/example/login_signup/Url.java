@@ -13,11 +13,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Url {
+
     public String getUrl() {
         return Url;
     }
     public String get_PhotosUrl() {
         return Url_Photos;
+    }
+    public String get_Ftp_password() {
+        return Ftp_password;
+    }
+    public String get_Ftp_user() {
+        return Ftp_user;
     }
     public String get_Jde_user() {
         return Jde_user;
@@ -122,17 +129,110 @@ public class Url {
                 else {
                     File gpxfile = new File(root.getAbsolutePath()+ "/"+"photos_config.txt");
                     FileWriter writer = new FileWriter(gpxfile);
-                    writer.append("file://192.168.100.80/e920/mediaobj/Misc Images/");
+                    writer.append("89.249.214.242");
                     writer.flush();
                     writer.close();
                     //Toast.makeText(Context, "Saved", Toast.LENGTH_SHORT).show();
-                    Url_Photos ="file://192.168.100.80/e920/mediaobj/Misc Images/";
+                    Url_Photos ="89.249.214.242";
                 }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+            try{
+                File conf=new File(root.getAbsolutePath()+ "/"+"user_photos_config.txt");
+                if (conf.exists()){
+                    Log.i("files user_photos_config ","exists");
+                    // read the ip from the file
+
+                    String line1 = null;
+
+                    try {
+                        FileInputStream fileInputStream = new FileInputStream (conf);
+                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        while ( (line1 = bufferedReader.readLine()) != null )
+                        {
+                            stringBuilder.append(line1 + System.getProperty("line.separator"));
+                        }
+                        fileInputStream.close();
+                        line1 = stringBuilder.toString();
+
+                        bufferedReader.close();
+                    }
+                    catch(FileNotFoundException ex) {
+                        Log.d("error", ex.getMessage());
+                    }
+                    catch(IOException ex) {
+                        Log.d("error", ex.getMessage());
+                    }
+
+                    Log.i("line1 ",line1);
+                    Ftp_user=line1.trim();
+                }
+                else {
+                    File gpxfile = new File(root.getAbsolutePath()+ "/"+"user_photos_config.txt");
+                    FileWriter writer = new FileWriter(gpxfile);
+                    writer.append("jdeftp");
+                    writer.flush();
+                    writer.close();
+                    //Toast.makeText(Context, "Saved", Toast.LENGTH_SHORT).show();
+                    Ftp_user ="jdeftp";
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try{
+                File conf=new File(root.getAbsolutePath()+ "/"+"password_photos_config.txt");
+                if (conf.exists()){
+                    Log.i("files password_photos_config ","exists");
+                    // read the ip from the file
+
+                    String line1 = null;
+
+                    try {
+                        FileInputStream fileInputStream = new FileInputStream (conf);
+                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        while ( (line1 = bufferedReader.readLine()) != null )
+                        {
+                            stringBuilder.append(line1 + System.getProperty("line.separator"));
+                        }
+                        fileInputStream.close();
+                        line1 = stringBuilder.toString();
+
+                        bufferedReader.close();
+                    }
+                    catch(FileNotFoundException ex) {
+                        Log.d("error", ex.getMessage());
+                    }
+                    catch(IOException ex) {
+                        Log.d("error", ex.getMessage());
+                    }
+
+                    Log.i("line1 ",line1);
+                    Ftp_password=line1.trim();
+                }
+                else {
+                    File gpxfile = new File(root.getAbsolutePath()+ "/"+"password_photos_config.txt");
+                    FileWriter writer = new FileWriter(gpxfile);
+                    writer.append("Jde@ftp");
+                    writer.flush();
+                    writer.close();
+                    //Toast.makeText(Context, "Saved", Toast.LENGTH_SHORT).show();
+                    Ftp_password ="Jde@ftp";
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             try{
                 File conf=new File(root.getAbsolutePath()+ "/"+"jde_conf.txt");
                 if (conf.exists()){
@@ -220,7 +320,7 @@ public class Url {
                     writer.flush();
                     writer.close();
                     //Toast.makeText(Context, "Saved", Toast.LENGTH_SHORT).show();
-                    Jde_user ="AISMOB";
+                    Jde_pass ="AISMOB";
                 }
 
             } catch (Exception e) {
@@ -267,7 +367,7 @@ public class Url {
                     writer.flush();
                     writer.close();
                     //Toast.makeText(Context, "Saved", Toast.LENGTH_SHORT).show();
-                    Jde_user ="JDV920";
+                    Jde_environment ="JDV920";
                 }
 
             } catch (Exception e) {
@@ -310,11 +410,11 @@ public class Url {
                 else {
                     File gpxfile = new File(root.getAbsolutePath()+ "/"+"Map_conf.txt");
                     FileWriter writer = new FileWriter(gpxfile);
-                    writer.append("http://129.159.198.129:7001/meter_reading/meter_reading.html");
+                    writer.append("http://102.134.98.158:7001");
                     writer.flush();
                     writer.close();
                     //Toast.makeText(Context, "Saved", Toast.LENGTH_SHORT).show();
-                    Url_Map ="http://129.159.198.129:7001/meter_reading/meter_reading.html";
+                    Url_Map ="http://102.134.98.158:7001";
                 }
 
             } catch (Exception e) {
@@ -333,5 +433,8 @@ public class Url {
     private String Jde_user;
     private String Jde_pass;
     private String Jde_environment;
+    private String Ftp_user;
+    private String Ftp_password;
+
 
 }

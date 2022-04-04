@@ -28,32 +28,36 @@
             android:src="@drawable/ic_menu"
             tools:ignore="RtlCompat">
         </ImageButton>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:hint="  Rechercher ..... "
-            android:textAlignment="center"
-            android:padding="10dp"
-            android:textSize="15sp"
-            android:elevation="10dp"
-            android:background="@drawable/searchview"
-            android:layout_marginTop="13dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginRight="55dp"
-            android:orientation="horizontal">
+
+
             <EditText
                 android:id="@+id/etSearch"
-                android:layout_width="0dp"
-                android:layout_weight="20"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
                 android:hint="  Rechercher ..... "
                 android:textSize="15sp"
                 android:elevation="10dp"
-                android:background="@color/colorWhite"
-                >
+                android:background="@drawable/searchview"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="55dp"
+                android:layout_marginRight="55dp"
+                android:orientation="horizontal">
             </EditText>
-        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/refresh"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:textAlignment="center"
+            android:elevation="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/searchview"
+            android:src="@drawable/ic_syncdp"
+            tools:ignore="RtlCompat">
+        </ImageButton>
         <com.sothree.slidinguppanel.SlidingUpPanelLayout
             android:id="@+id/sliding_layout"
             android:layout_width="fill_parent"
@@ -75,13 +79,43 @@
                 android:layout_height="match_parent"
                 >
 
-                <WebView
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    >
+                    <LinearLayout
+                        android:id="@+id/lvparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:weightSum="6"
+                        android:layout_marginTop="5dp"
+                        android:background="#ffffff"
+                        android:layout_marginBottom="60dp"
+                        android:orientation="vertical">
 
-                </WebView>
+                        <lecho.lib.hellocharts.view.PieChartView
+                            android:id="@+id/chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:elevation="2dp"
+                            android:focusableInTouchMode="true"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp">
+                        </lecho.lib.hellocharts.view.PieChartView>
+
+
+                       <LinearLayout
+                           android:id="@+id/values_of_chart"
+                           android:layout_width="match_parent"
+                           android:layout_height="0dp"
+                           android:layout_weight="2"
+                           android:orientation="vertical"
+                           >
+
+                       </LinearLayout>
+
+                    </LinearLayout>
+
 
             </FrameLayout>
             <!-- SLIDING LAYOUT -->
@@ -175,14 +209,17 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:weightSum="5"
                     android:layout_height="40dp"
                     android:orientation="horizontal"
                     android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/curve_layout">
 
                     <ImageButton
                         android:id="@+id/imgFrom"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
                         android:background="@color/colorWhite"
@@ -210,7 +247,7 @@
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_marginBottom="20dp"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:background="@color/colorGray"
                         android:gravity="center|center_horizontal|center_vertical"
                         android:textAlignment="center"
@@ -221,7 +258,8 @@
 
                     <ImageButton
                         android:id="@+id/imgTo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:src="@drawable/double_right"
                         android:scaleType="fitCenter"
@@ -244,19 +282,19 @@
                 <!--                app:tabMode="fixed"-->
                 <!--                app:tabGravity="fill"/>-->
 
-<!--                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:id="@+id/swipeRefreshLayout"-->
-<!--                    >-->
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/swipeRefreshLayout"
+                    >
                         <ListView
                              android:id="@+id/listview"
                              android:layout_width="match_parent"
                              android:layout_height="0dp"
                              android:layout_weight="1"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="40dp"
                         />
-<!--                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
             </LinearLayout>
 
 

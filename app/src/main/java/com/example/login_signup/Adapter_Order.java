@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.login_signup.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.lang.reflect.Array;
@@ -116,8 +117,8 @@ public class Adapter_Order extends ArrayAdapter<T_Orders> {
             description.setText(cell.getDescription());
             MyDataBaseHelper db = new MyDataBaseHelper(l_context);
 
-            status.setText(db.getDetails_description("S1",cell.getWork_status()));
-            Log.i("WORKORDERSTATUSCODE/DESCRIPTION", db.getDetails_description("S1",cell.getWork_status())+ "");
+            status.setText(db.getDetails_description("S1",cell.getstatus()));
+            Log.i("WORKORDERSTATUSCODE/DESCRIPTION", db.getDetails_description("S1",cell.getstatus())+ "");
             //start_date.setText(String.valueOf(order.getStart_date()));
 
 

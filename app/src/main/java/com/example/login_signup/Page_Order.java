@@ -2,45 +2,39 @@ package com.example.login_signup;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.media.Image;
-import android.media.metrics.Event;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,57 +42,47 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatCheckBox;
-import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.login_signup.ui.main.Page_DataOrder;
+//import com.anychart.AnyChart;
+//import com.anychart.AnyChartView;
+//import com.anychart.charts.Pie;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.navigation.NavigationView;
-import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
-import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.text.DateFormat;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
-import java.util.stream.Collectors;
 
-public class Page_Order extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback {
+import lecho.lib.hellocharts.listener.PieChartOnValueSelectListener;
+import lecho.lib.hellocharts.model.PieChartData;
+import lecho.lib.hellocharts.model.SliceValue;
+import lecho.lib.hellocharts.view.PieChartView;
+
+public class Page_Order extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     ProgressDialog progress;
     private DrawerLayout drawer;
     ImageButton navigator;
+    ImageButton refresh;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
     ListView listView;
+    //AnyChartView anyChartView;
     ArrayList<T_Orders> ListElements = new ArrayList<>();
     ArrayList<T_Orders> arraysort = new ArrayList<>();
     ArrayList<T_Orders> ListElements_filter = new ArrayList<>();
@@ -107,6 +91,7 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
     ImageButton from;
     ImageButton to;
     ImageButton calendar;
+    LinearLayout values_of_chart , pie;
     //    Button btnfrom , btnto;
     TextView Date;
     String filter_date = new String();
@@ -117,7 +102,6 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
     MyDataBaseHelper db = new MyDataBaseHelper(this);
     Integer Order_Id = 0;
     Integer User_Id;
-    WebView webView;
     Url Url;
     DatePickerDialog datePickerDialog;
     String[] items;
@@ -142,7 +126,24 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
     private static final String PREF_LOCALE = "locale";
     private static final String DEFAULT_LOCALE_STRING = "en_US";
     private Context context;
-
+    private TextView txtinfo;
+    LinearLayout lvOne, lvTwo, lvThree, lvFour, lvFive, lvparent;
+    TextView txtOne, txtTwo, txtThree, txtFour, txtFive;
+    Button btnundo, btnsave;
+    PieView pieView;
+    Uri outputFileUri;
+    OutputStream outStream = null;
+    ArrayList<String> priorities_values = new ArrayList<>();
+    ArrayList<Integer> percentage_priorities=new ArrayList<>();
+    ArrayList<Integer> numbers=new ArrayList<>();
+    ArrayList<Integer> colors=new ArrayList<>();
+    PieChartView pieChartView;
+    ArrayList<com.example.login_signup.T_Details> priorities;
+    List<SliceValue> pieData = new ArrayList<>();
+    int green = Color.rgb(0, 130, 0);
+    int red = Color.rgb(230, 0, 00);
+    int orange = Color.rgb(230,172,0);
+    int black = Color.rgb(0, 0, 0);
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -221,6 +222,7 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
         return myQuittingDialogBox;
     }
 
+
     @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -229,21 +231,92 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
         setContentView(R.layout.activity_list_work_order);
 
         SwipeRefreshLayout swipeRefreshLayout;
+        //anyChartView = findViewById(R.id.any_chart_view);
         from = (ImageButton) findViewById(R.id.imgFrom);
         to = (ImageButton) findViewById(R.id.imgTo);
         //calendar = (ImageButton) findViewById(R.id.imgcalendar);
         navigator=(ImageButton) findViewById(R.id.opennav);
+        refresh=(ImageButton) findViewById(R.id.refresh);
+        //pieView = (PieView) findViewById(R.id.pie_view);
 
-//        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-//
-//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                swipeRefreshLayout.setRefreshing(false);
-//                // User defined method to shuffle the array list items
-//                shuffleListItems();
-//            }
-//        });
+        lvparent = (LinearLayout) findViewById(R.id.lvparent);
+        values_of_chart = (LinearLayout) findViewById(R.id.values_of_chart);
+        //pie = (LinearLayout) findViewById(R.id.pie);
+
+
+        colors.add(black);
+        colors.add(orange);
+        colors.add(green);
+        colors.add(red);
+
+        lvparent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+
+        db=new MyDataBaseHelper(this);
+        priorities_values = new ArrayList<>();
+        priorities = db.readDetails("PR");
+        for(int i=0 ; i<priorities.size();i++) {
+            priorities_values.add(i,priorities.get(i).getObservation());
+        }
+
+        LinearLayout layout = new LinearLayout(getApplicationContext());
+        for (int i = 0; i < priorities_values.size(); i++) {
+
+            if (i == 0 || i % 2 == 0) {
+                if (i != 0) {
+                    values_of_chart.addView(layout);
+                }
+                layout = new LinearLayout(getApplicationContext());
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                if (i == 0)
+                    layoutParams.setMargins(0, 80, 0, 0);
+                else layoutParams.setMargins(0, 10, 0, 0);
+                layout.setLayoutParams(layoutParams);
+                layout.setOrientation(LinearLayout.HORIZONTAL);
+            }
+
+            LinearLayout layout1 = new LinearLayout(getApplicationContext());
+            LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(40, 40);
+            layoutParams1.setMargins(20, 0, 0, 0);
+            layoutParams1.gravity = Gravity.CENTER_VERTICAL;
+            layout1.setBackgroundColor(colors.get(i));
+            layout1.setLayoutParams(layoutParams1);
+            layout1.setOrientation(LinearLayout.HORIZONTAL);
+            layout1.setPadding(2, 2, 2, 2);
+
+            layout.addView(layout1);
+
+            TextView t = new TextView(getApplicationContext());
+            LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams2.gravity = Gravity.CENTER_VERTICAL;
+            t.setLayoutParams(layoutParams2);
+            t.setPadding(2, 2, 2, 2);
+            t.setText(priorities_values.get(i));
+            t.setGravity(Gravity.CENTER_VERTICAL);
+            t.setTextSize(20);
+
+            layout.addView(t);
+
+            if (i % 2 != 0 && i == priorities_values.size() - 1) {
+                Log.i("ok", i + "");
+                values_of_chart.addView(layout);
+            }
+        }
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                // User defined method to shuffle the array list items
+                filter(etsearch.getText().toString() , filter_date, "" );
+            }
+        });
 
 
 
@@ -254,8 +327,20 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
 
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
         String formattedDate = df.format(c.getTime());
-        filter_date = formattedDate;
+
+        try {
+            Intent intent = getIntent();
+            User_Id = intent.getIntExtra("userId", 0);
+            Log.i("userid order", User_Id + "mm");
+            filter_date = intent.getStringExtra("startdate");
+            Log.i("intent.getStringExtra(\"date\")", filter_date + "");
+
+        } catch (Exception e) {
+            filter_date = formattedDate;
+        }
+
         Date = (TextView) findViewById(R.id.Date);
+
 
 
         Date.setText(formattedDate.substring(0,4)+"-"+formattedDate.substring(4,6)+"-"+formattedDate.substring(6,8));
@@ -268,7 +353,7 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                filter(etsearch.getText().toString() , filter_date);
+                filter(etsearch.getText().toString() , filter_date , "");
 
             }
 
@@ -310,7 +395,7 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
                                 Date.setText(year+"-"+fm+"-"+fd);
                                 Log.i("filter_date", filter_date);
                                 //etsearch.setText(etsearch.getText());
-                                filter(etsearch.getText().toString() , filter_date);
+                                filter(etsearch.getText().toString() , filter_date, "");
 
                             }
                         }, mYear, mMonth, mDay);
@@ -445,9 +530,6 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
         //itemsList = sortAndAddSections(ListElements);
         //adapter = new Adapter_Order(Page_Order.this,0, itemsList);
         //listView.setAdapter(adapter);
-
-        webView = (WebView) findViewById(R.id.map);
-        webView.setWebChromeClient(new WebChromeClient());
         //searchimage = (ImageView) findViewById(R.id.search_boutton);
 
 
@@ -506,7 +588,6 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
 
         etsearch = (EditText) findViewById(R.id.etSearch);
         etsearch.setText("");
-
         etsearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -516,7 +597,7 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-              filter(s.toString() , filter_date);
+              filter(s.toString() , filter_date, "");
             }
 
             @Override
@@ -525,19 +606,10 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
             }
         });
 
-
-        WebSettings websettings = webView.getSettings();
-        websettings.setJavaScriptEnabled(true);
         Log.i("packagecodepath", getPackageCodePath() + "");
 
 
-        try {
-            Intent intent = getIntent();
-            User_Id = intent.getIntExtra("userId", 0);
-            Log.i("userid order", User_Id + "mm");
-        } catch (Exception e) {
 
-        }
 
         Log.i("Location", "ana bi aleb el Order Activity");
 
@@ -562,6 +634,12 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
 
             }
         });
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filter(etsearch.getText().toString() , filter_date, "" );
+            }
+        });
 
         setSupportActionBar(toolbar);
         drawerToggle = new ActionBarDrawerToggle(Page_Order.this, drawer, toolbar,
@@ -573,6 +651,7 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
        // getSupportActionBar().setHomeButtonEnabled(true);
         generateListOrder();
 
+        //setupPieChart();
 
         mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         mLayout.setAnchorPoint(0.5f);
@@ -599,36 +678,126 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
 
             }
         });
-        mLayout.setFadeOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-
-        });
 
 
     }
 
-    private void filter(String s, String filter_date) {
-        Log.i("filter_s" , s);
-        arraysort.clear();
-        for (int i=0 ; i<ListElements.size() ; i++)
-        {
-            String type = ListElements.get(i).getType();
-            String order_number = String.valueOf(ListElements.get(i).getOrder_number());
-            Log.i("typeListelements" , type + "");
-            Log.i("ordernumberListelements" , order_number + "");
-            Boolean test = ((type.toLowerCase().contains(s.toLowerCase()) || type.toUpperCase().contains(s.toUpperCase())) || order_number.startsWith(s)) && filter_date.equals(ListElements.get(i).getStart_date());
-            if(test){
-                Log.i("filterdate" , filter_date);
-                Log.i("test" , type);
-                Log.i("test" , order_number);
-                arraysort.add(ListElements.get(i));
+    private void filter(String s, String filter_date ,  String priority) {
+
+        if (priority.equals("")) {
+            Log.i("filter_s", s);
+            arraysort.clear();
+            for (int i = 0; i < ListElements.size(); i++) {
+                String type = ListElements.get(i).getType();
+                String order_number = String.valueOf(ListElements.get(i).getOrder_number());
+                Log.i("typeListelements", type + "");
+                Log.i("ordernumberListelements", order_number + "");
+                Boolean test = ((type.toLowerCase().contains(s.toLowerCase()) || type.toUpperCase().contains(s.toUpperCase())) || order_number.startsWith(s)) && filter_date.equals(ListElements.get(i).getStart_date());
+                if (test) {
+                    Log.i("filterdate", filter_date);
+                    Log.i("test", type);
+                    Log.i("test", order_number);
+                    arraysort.add(ListElements.get(i));
+                }
             }
+            Log.i("arraysort_size", arraysort.size() + "");
+            adapter = new Adapter_Order(Page_Order.this, 0, arraysort);
+            listView.setAdapter(adapter);
+            //set_chart();
+
+            pieData.clear();
+            numbers = new ArrayList<>();
+            for (int i = 0; i < priorities.size(); i++) {
+                numbers.add(i, 0);
+            }
+            Log.i("ListElemetssize", arraysort.size() + "");
+            Log.i("pieHelperArrayListsize", pieData.size() + "");
+            Log.i("priorities_values", priorities_values.size() + "");
+            Log.i("numbers", numbers.size() + "");
+            for (int i = 0; i < arraysort.size(); i++) {
+                Log.i("ListElemeti", arraysort.get(i).getPriority() + "/" + priorities_values.get(0));
+                if (arraysort.get(i).getPriority().equals(db.getDetails_code("PR", priorities_values.get(0)).trim())) {
+                    numbers.set(0, numbers.get(0) + 1);
+                } else if (arraysort.get(i).getPriority().equals(db.getDetails_code("PR", priorities_values.get(1)).trim())) {
+                    numbers.set(1, numbers.get(1) + 1);
+                } else if (arraysort.get(i).getPriority().equals(db.getDetails_code("PR", priorities_values.get(2)).trim())) {
+                    numbers.set(2, numbers.get(2) + 1);
+                } else if (arraysort.get(i).getPriority().equals(db.getDetails_code("PR", priorities_values.get(3)).trim())) {
+                    numbers.set(3, numbers.get(3) + 1);
+                }
+            }
+            if (arraysort.size() != 0) {
+                for (int i = 0; i < priorities_values.size(); i++) {
+                    if (numbers.get(i).equals(0)) {
+                        pieData.add(new SliceValue(numbers.get(i) * 100 / arraysort.size(), colors.get(i)).setLabel(""));
+                    } else {
+                        pieData.add(new SliceValue(numbers.get(i) * 100 / arraysort.size(), colors.get(i)).setLabel(priorities_values.get(i) + " / " + numbers.get(i) * 100 / arraysort.size() + "%"));
+                    }
+                }
+            }
+
+            PieChartData pieChartData = new PieChartData(pieData);
+            pieChartData.setSlicesSpacing(0);
+            pieChartData.setHasLabels(true);
+            pieChartData.setHasLabels(true).setValueLabelTextSize(14);
+            //pieChartData.setHasCenterCircle(true).setCenterText1("priorités").setCenterText1FontSize(20).setCenterText1Color(black);
+
+//            if(){
+//
+//            }
+
+            pieChartView = findViewById(R.id.chart);
+
+            pieChartView.setPieChartData(pieChartData);
+            pieChartView.setOnValueTouchListener(new PieChartOnValueSelectListener() {
+                @Override
+                public void onValueSelected(int arcIndex, SliceValue value) {
+                    db=new MyDataBaseHelper(getApplicationContext());
+                    String priority_=String.valueOf( value.getLabel()).substring(0, String.valueOf( value.getLabel()).indexOf(" / "));
+                    Log.i("index", arcIndex + "/" +priority_  );
+                    Log.i("priority", priority_);
+                    Log.i("priority_code", db.getDetails_code("PR",priority_).trim() + "");
+                    filter(etsearch.getText().toString() , filter_date, db.getDetails_code("PR",priority_).trim() );
+                }
+
+                @Override
+                public void onValueDeselected() {
+                    filter(etsearch.getText().toString() , filter_date,"" );
+
+                }
+            });
+            pieChartView.setChartRotationEnabled(false);
+
+            pieChartView.setPieChartData(pieChartData);
+
+
+//        PieView pieview1 = new PieView(getApplicationContext());
+            //set(pieView);
         }
-        Log.i("arraysort_size" , arraysort.size() + "");
-        adapter =new Adapter_Order(Page_Order.this , 0 , arraysort);
-        listView.setAdapter(adapter);
+        else {
+            Log.i("filter_s", s);
+            arraysort.clear();
+            for (int i = 0; i < ListElements.size(); i++) {
+                String type = ListElements.get(i).getType();
+                String order_number = String.valueOf(ListElements.get(i).getOrder_number());
+                Log.i("typeListelements", type + "");
+                Log.i("ordernumberListelements", order_number + "");
+                Boolean test = ((type.toLowerCase().contains(s.toLowerCase()) || type.toUpperCase().contains(s.toUpperCase())) || order_number.startsWith(s)) && filter_date.equals(ListElements.get(i).getStart_date())  && ListElements.get(i).getPriority().equals(priority);
+                if (test) {
+                    Log.i("filterdate", filter_date);
+                    Log.i("test", type);
+                    Log.i("test", order_number);
+                    arraysort.add(ListElements.get(i));
+                }
+            }
+            Log.i("arraysort_size", arraysort.size() + "");
+            adapter = new Adapter_Order(Page_Order.this, 0, arraysort);
+            listView.setAdapter(adapter);
+        }
+    }
+
+    private void set_chart() {
+
     }
 
 
@@ -747,7 +916,152 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
 //        ((TextView) findViewById(R.id.tv_timezone)).setText(event.timezone);
 //    }
 
+    public void SaveImage() {
+        lvparent.buildDrawingCache();
+        Bitmap bm = lvparent.getDrawingCache();
 
+        try {
+            File root = new File(Environment.getExternalStorageDirectory()
+                    + File.separator + "PieChartsExample" + File.separator);
+            root.mkdirs();
+            File sdImageMainDirectory = new File(root, "piechart.jpg");
+            outputFileUri = Uri.fromFile(sdImageMainDirectory);
+            outStream = new FileOutputStream(sdImageMainDirectory);
+        } catch (Exception e) {
+            Toast.makeText(this, "Error occured. Please try again later.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            bm.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+            Toast.makeText(this, "Created successfully!", Toast.LENGTH_SHORT)
+                    .show();
+        } catch (Exception e) {
+        }
+    }
+
+    private void set(PieView pieView) {
+        //pie.removeAllViews();
+//        pieView = new PieView(getApplicationContext());
+        ArrayList<PieHelper> pieHelperArrayList = new ArrayList<PieHelper>();
+        ArrayList<com.example.login_signup.T_Details> priorities = db.readDetails("PR");
+        priorities_values = new ArrayList<>();
+        numbers=new ArrayList<>();
+        for(int i=0 ; i<priorities.size();i++) {
+            priorities_values.add(i,priorities.get(i).getObservation());
+            numbers.add(i,0);
+        }
+
+
+
+        Log.i("ListElemetssize", arraysort.size()+"");
+        Log.i("pieHelperArrayListsize", pieHelperArrayList.size()+"");
+        Log.i("priorities_values", priorities_values.size()+"");
+        Log.i("numbers", numbers.size()+"");
+
+        for (int i=0;i<arraysort.size();i++){
+            Log.i("ListElemeti", arraysort.get(i).getPriority()+"/" + priorities_values.get(0));
+            if(arraysort.get(i).getPriority().equals(db.getDetails_code("PR", priorities_values.get(0)).trim())){
+                numbers.set(0,numbers.get(0)+1);
+            }
+            else if (arraysort.get(i).getPriority().equals(db.getDetails_code("PR", priorities_values.get(1)).trim())){
+                numbers.set(1,numbers.get(1)+1);
+            }
+            else if(arraysort.get(i).getPriority().equals(db.getDetails_code("PR", priorities_values.get(2)).trim())){
+                numbers.set(2,numbers.get(2)+1);
+            }
+            else if(arraysort.get(i).getPriority().equals(db.getDetails_code("PR", priorities_values.get(3)).trim())){
+                numbers.set(3,numbers.get(3)+1);
+            }
+        }
+
+        for(int i=0 ; i<priorities.size();i++) {
+            Log.i("priorities"+i,priorities_values.get(i) + "/"+numbers.get(i));
+        }
+if(arraysort.size()!=0) {
+
+    values_of_chart.removeAllViews();
+    for (int i = 0; i < priorities_values.size(); i++) {
+        percentage_priorities.add(numbers.get(i) * 100 / arraysort.size());
+//        PieHelper pieHelper = new PieHelper(percentage_priorities.get(i), colors.get(i));
+//        pieHelperArrayList.add(pieHelper);
+    }
+
+
+    pieHelperArrayList.add(new PieHelper(percentage_priorities.get(0), colors.get(0)));
+    pieHelperArrayList.add(new PieHelper(percentage_priorities.get(1), colors.get(1)));
+    pieHelperArrayList.add(new PieHelper(percentage_priorities.get(2), colors.get(2)));
+    pieHelperArrayList.add(new PieHelper(percentage_priorities.get(3), colors.get(3)));
+
+//
+    LinearLayout layout = new LinearLayout(getApplicationContext());
+    for (int i = 0; i < priorities_values.size(); i++) {
+
+        if (i == 0 || i % 2 == 0) {
+            if (i != 0) {
+                values_of_chart.addView(layout);
+            }
+            layout = new LinearLayout(getApplicationContext());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            if (i == 0)
+                layoutParams.setMargins(0, 80, 0, 0);
+            else layoutParams.setMargins(0, 10, 0, 0);
+            layout.setLayoutParams(layoutParams);
+            layout.setOrientation(LinearLayout.HORIZONTAL);
+        }
+
+        LinearLayout layout1 = new LinearLayout(getApplicationContext());
+        LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(40, 40);
+        layoutParams1.setMargins(20, 0, 0, 0);
+        layoutParams1.gravity = Gravity.CENTER_VERTICAL;
+        layout1.setBackgroundColor(colors.get(i));
+        layout1.setLayoutParams(layoutParams1);
+        layout1.setOrientation(LinearLayout.HORIZONTAL);
+        layout1.setPadding(2, 2, 2, 2);
+
+        layout.addView(layout1);
+
+
+        TextView t = new TextView(getApplicationContext());
+        LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams2.gravity = Gravity.CENTER_VERTICAL;
+        t.setLayoutParams(layoutParams2);
+        t.setPadding(2, 2, 2, 2);
+        t.setText(priorities_values.get(i));
+        t.setGravity(Gravity.CENTER_VERTICAL);
+        t.setTextSize(20);
+
+        layout.addView(t);
+
+        if (i % 2 != 0 && i == priorities_values.size() - 1) {
+            Log.i("ok", i + "");
+            values_of_chart.addView(layout);
+        }
+    }
+
+    Log.i("pieHelperArrayListsizesize", pieHelperArrayList.size()+"");
+    for(int i=0;i<pieHelperArrayList.size();i++){
+        Log.i("pieHelperArrayList percent/color" + i, pieHelperArrayList.get(i).getPercentStr()+"/" + pieHelperArrayList.get(i).getColor());
+    }
+
+    pieView.setDate(pieHelperArrayList);
+    pieView.setOnPieClickListener(new PieView.OnPieClickListener() {
+        @Override
+        public void onPieClick(int index) {
+//                if (index != PieView.NO_SELECTED_INDEX) {
+//                    txtinfo.setText(percentage[index] + "% owns "
+//                            + petNames[index] + ".");
+//                } else {
+//                    txtinfo.setText("No selected pie");
+//                }
+        }
+    });
+
+   //pie.addView(pieView);
+}
+    }
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
 
@@ -803,10 +1117,6 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
         }
     }
 
-    @Override
-    public void onMapReady(GoogleMap var1) {
-
-    }
 
     public static Date addDay(Date date, int i) {
         Calendar cal = Calendar.getInstance();
@@ -833,35 +1143,8 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
         try {
             ArrayList<T_Orders> orders = db.readOrder(User_Id);
             ListElements = orders;
-            Log.i("oncreatefilterdate" , filter_date + "");
-            filter("" ,filter_date);
-            for (int i = 0; i < orders.size(); i++) {
-                if (i == 0) {
-
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                            != PackageManager.PERMISSION_GRANTED
-                            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    } else
-                        // regideo maktab
-                        // webView.loadUrl("http://192.168.100.60:83/meter_reading/meter_reading.html?year=" + tournees.get(i).getYear() + "&month=" + tournees.get(i).getPeriod() + "&round=" + tournees.get(i).getTournee_ID());
-                        //Log.i("url", "http://192.168.100.60:83/meter_reading/meter_reading.html?year=" + tournees.get(i).getYear() + "&month=" + tournees.get(i).getPeriod() + "&round=" + tournees.get(i).getTournee_ID());
-
-                        // regideso africa
-                        //webView.loadUrl("http://102.134.98.158:7001/meter_reading/meter_reading.html?year=" + tournees.get(i).getYear() + "&month=" + tournees.get(i).getPeriod() + "&round=" + tournees.get(i).getTournee_ID());
-                        //Log.i("url", "http://102.134.98.158:7001/meter_reading/meter_reading.html?year=" + tournees.get(i).getYear() + "&month=" + tournees.get(i).getPeriod() + "&round=" + tournees.get(i).getTournee_ID());
-
-
-                        // sbee
-                        Url = new Url(getApplicationContext());
-                    webView.loadUrl(Url.get_Url_Map() + "?year=" + "2021" + "&month=" + "7" + "&round=" + "2041633");
-                    webView.loadUrl(Url.get_Url_Map() + "?year=" + "2021" + "&month=" + "7" + "&round=" + "2041633");
-                    Log.i("url", Url.get_Url_Map() + "?year=" + "2021" + "&month=" + "7" + "&round=" + "2041633");
-
-                }
-
-            }
+            Log.i("filter" , filter_date + "");
+            filter("" ,filter_date, "");
             db.close();
 
 //            Adapter_Order adapter = new Adapter_Order(Page_Order.this, 0, ListElements);
@@ -871,7 +1154,7 @@ public class Page_Order extends AppCompatActivity implements NavigationView.OnNa
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        //set(pieView);
 
     }
 

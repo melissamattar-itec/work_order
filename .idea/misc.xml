@@ -3,7 +3,34 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ITEC/AppData/Local/Android/Sdk/platforms/android-31/data/res/drawable/btn_dropdown.xml" value="0.11875" />
         <entry key="..\:/Users/ITEC/Desktop/Work_Order/Work_Order/app/src/main/res/layout/fragment__detail.xml" value="0.1675925925925926" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable-anydpi/ic_directions.xml" value="0.153125" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable-anydpi/ic_etude.xml" value="0.11614583333333334" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable-anydpi/ic_location_details.xml" value="0.15648148148148147" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable-anydpi/ic_mail.xml" value="0.18229166666666666" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable-anydpi/ic_takephoto.xml" value="0.153125" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable/border_black.xml" value="0.16822916666666668" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable/ic_details.xml" value="0.12135416666666667" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable/ic_message.xml" value="0.12239583333333333" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable/ic_notes.xml" value="0.12135416666666667" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable/ic_status.xml" value="0.12135416666666667" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/drawable/text_view_border_gray.xml" value="0.2203125" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/activity_list_work_order.xml" value="0.26078028747433263" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/activity_login.xml" value="0.109375" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/activity_page_data_order.xml" value="0.21" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/activity_preferences.xml" value="0.15416666666666667" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/fragment_Labor.xml" value="0.10989583333333333" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/fragment__detail.xml" value="0.33" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/fragment__etude.xml" value="0.1" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/fragment__labor.xml" value="0.1" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/fragment__notes.xml" value="0.1484375" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/fragment__status__update.xml" value="0.22" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/layout_item_labor.xml" value="0.25" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/layout_item_order.xml" value="0.11145833333333334" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/spinner.xml" value="0.1" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/layout/spinner_item.xml" value="0.11510416666666666" />
+        <entry key="..\:/Work_Order/Work_Order/app/src/main/res/menu/infos.xml" value="0.1" />
       </map>
     </option>
   </component>

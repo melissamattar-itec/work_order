@@ -68,6 +68,8 @@ dependencies {
     compile "de.halfbit:pinned-section-listview:1.0.0"
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-
+    //implementation 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
+   // implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
 
 }
